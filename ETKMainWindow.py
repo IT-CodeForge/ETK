@@ -49,6 +49,11 @@ class ETKMainWindow(ETKBaseTkObject):
     def __init__(self, pos: Vector2d = Vector2d(0, 0), size: Optional[Vector2d] = None, caption: str = "Window-Title", fullscreen: bool = True, *, visibility: bool = True, background_color: int = 0xAAAAAA, scheduler_disabled: bool = False, scale_factor: float = 1, **kwargs: Any) -> None:
         from .ETKCanvas import ETKCanvas
         self._tk_object: Tk = Tk()
+
+        def raise_exception(exc: Exception, *_: Any):
+            self.exit()
+        self._tk_object.report_callback_exception = raise_exception #type:ignore
+
         self._main = ETKMain(self._tk_object, ETKScheduler(self._tk_object, scheduler_disabled), scale_factor)
         self.__topmost = False
         self.exit_locked = False
