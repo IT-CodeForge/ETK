@@ -18,12 +18,9 @@ class ETKScheduler:
         self.__disabled = disabled
         self._blocked = False
         self.__tk = tk
-        self.__scheduled_events: list[tuple[Callable[..., Any], ETKEventData]] = [
-        ]
-        self.__scheduled_gui_actions: dict[Callable[..., Any],
-                                           tuple[tuple[Any, ...], dict[str, Any]]] = {}
-        self.__scheduled_non_gui_actions: dict[Callable[...,
-                                                        Any], tuple[tuple[Any, ...], dict[str, Any]]] = {}
+        self.__scheduled_events: list[tuple[Callable[..., Any], ETKEventData]] = []
+        self.__scheduled_gui_actions: dict[Callable[..., Any], tuple[tuple[Any, ...], dict[str, Any]]] = {}
+        self.__scheduled_non_gui_actions: dict[Callable[..., Any], tuple[tuple[Any, ...], dict[str, Any]]] = {}
         self.__thread = Thread(target=self.__handler)
         if not self.__disabled:
             self.__thread.start()
