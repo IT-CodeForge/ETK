@@ -3,7 +3,7 @@ from threading import Thread, current_thread
 import threading
 import time
 from tkinter import Tk
-from typing import Any, Callable
+from typing import Any, Callable, Type
 
 from .ETKEventData import ETKEventData
 
@@ -17,6 +17,8 @@ class ETKScheduler:
         self.__exit = False
         self.__disabled = disabled
         self._blocked = False
+        self.except_exceptions: tuple[Type[Exception], ...] = tuple()
+        self.except_exception_handler: Callable[[Exception], Any] = lambda _: True
         self.__tk = tk
         self.__scheduled_events: list[tuple[Callable[..., Any], ETKEventData]] = []
         self.__scheduled_gui_actions: dict[Callable[..., Any], tuple[tuple[Any, ...], dict[str, Any]]] = {}
@@ -88,6 +90,10 @@ class ETKScheduler:
                 self.__tk.after(0, sys.exit)
                 sys.exit()
         
+        except self.except_exceptions as e:
+            if self.except_exception_handler(e):
+                self.__tk.after(0, sys.exit)
+
         except Exception as e:
             self.__tk.after(0, sys.exit)
             raise e
