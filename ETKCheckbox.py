@@ -35,7 +35,7 @@ class ETKCheckbox(ETKBaseTkWidgetButton):
 
     @property
     def state(self) -> bool:
-        return self.__state
+        return bool(self.__state_var.get())
 
     @state.setter
     def state(self, value: bool) -> None:

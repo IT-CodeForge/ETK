@@ -47,7 +47,7 @@ class ETKDropdownMenu(ETKBaseTkWidgetDisableable):
 
     @property
     def selected(self) -> str:
-        return self.__selected
+        return self.__selected_var.get()
     
     @selected.setter
     def selected(self, value: str) -> None:
