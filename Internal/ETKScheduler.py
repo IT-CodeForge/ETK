@@ -69,23 +69,28 @@ class ETKScheduler:
             self.__scheduled_non_gui_actions))
 
     def __handler(self):
-        while not self.__exit and threading.main_thread().is_alive():
-            begin_ns = time.time_ns()
+        try:
+            while not self.__exit and threading.main_thread().is_alive():
+                begin_ns = time.time_ns()
 
-            if len(self.__scheduled_gui_actions.keys()) != 0 or len(self.__scheduled_non_gui_actions.keys()) != 0:
-                raise RuntimeError
+                if len(self.__scheduled_gui_actions.keys()) != 0 or len(self.__scheduled_non_gui_actions.keys()) != 0:
+                    raise RuntimeError
 
-            while len(self.__scheduled_events) > 0 and not self.__exit:
-                c1, data = self.__scheduled_events[0]
-                self.__scheduled_events.pop(0)
-                exec_event_callback(c1, data)
-            self.handle_actions()
+                while len(self.__scheduled_events) > 0 and not self.__exit:
+                    c1, data = self.__scheduled_events[0]
+                    self.__scheduled_events.pop(0)
+                    exec_event_callback(c1, data)
+                self.handle_actions()
 
-            sleep_duration = 0.1
-            duration = (time.time_ns() - begin_ns) / 10**9
-            duration = sleep_duration if duration > sleep_duration else duration
-            time.sleep(sleep_duration - duration)
+                sleep_duration = 0.1
+                duration = (time.time_ns() - begin_ns) / 10**9
+                duration = sleep_duration if duration > sleep_duration else duration
+                time.sleep(sleep_duration - duration)
 
-        if threading.main_thread().is_alive():
+            if threading.main_thread().is_alive():
+                self.__tk.after(0, sys.exit)
+                sys.exit()
+        
+        except Exception as e:
             self.__tk.after(0, sys.exit)
-            sys.exit()
+            raise e
