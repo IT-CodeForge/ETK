@@ -29,7 +29,7 @@ class ETKEventData:
         for a in self.__ATTRIBUTES.keys():
             if (v := getattr(self, a)) is not None:
                 attr.append(f"{a}: {repr(v)}")
-        return f"ETKEventData<{"; ".join(attr)}>"
+        return f"ETKEventData<{'; '.join(attr)}>"
 
     def __repr__(self) -> str:
         st = self.__str__()
