@@ -17,32 +17,26 @@ from .ETKBaseObject import ETKEvents
 class ETKContainerEvents(ETKEvents):
     pass
 
-# region ExceptionTypes
-
-
-class ElementAlreadyAddedError(ValueError):
-    pass
-
-
-class AddContainerToItselfError(ValueError):
-    pass
-
-
-class ElementNotPartOfContainerError(ValueError):
-    pass
-
-
-class SizeError(ValueError):
-    pass
-
-
-class PosError(ValueError):
-    pass
-
-# endregion
-
 
 class ETKBaseContainer(ETKBaseWidgetDisableable):
+    # region ExceptionTypes
+
+    class ElementAlreadyAddedError(ValueError):
+        pass
+
+    class AddContainerToItselfError(ValueError):
+        pass
+
+    class ElementNotPartOfContainerError(ValueError):
+        pass
+
+    class SizeError(ValueError):
+        pass
+
+    class PosError(ValueError):
+        pass
+
+    # endregion
     # region Enums
 
     class Alignments(Enum):
@@ -239,10 +233,10 @@ class ETKBaseContainer(ETKBaseWidgetDisableable):
 
     def _prepare_element_add(self, element: ETKBaseWidget) -> None:
         if element in self._element_rel_pos.keys():
-            raise ElementAlreadyAddedError(
+            raise self.ElementAlreadyAddedError(
                 f"element {element} is already in container {self}")
         if element == self:
-            raise AddContainerToItselfError(
+            raise self.AddContainerToItselfError(
                 f"cannot add container {self} to itself")
 
         element._parent = self
@@ -254,7 +248,7 @@ class ETKBaseContainer(ETKBaseWidgetDisableable):
 
     def remove_element(self, element: ETKBaseWidget) -> None:
         if element not in self._element_rel_pos.keys():
-            raise ElementNotPartOfContainerError(
+            raise self.ElementNotPartOfContainerError(
                 f"element {element} is not in container {self}")
         self._element_rel_pos.pop(element)
         element._parent = None
@@ -325,7 +319,7 @@ class ETKBaseContainer(ETKBaseWidgetDisableable):
 
     def _get_childs_abs_pos(self, child: ETKBaseWidget) -> Vector2d:
         if child not in self._element_rel_pos.keys():
-            raise ElementNotPartOfContainerError(
+            raise self.ElementNotPartOfContainerError(
                 f"element {child} is not in container {self}")
         pos = self._element_rel_pos[child]
         return Vector2d(pos.x + self.abs_pos.x, pos.y + self.abs_pos.y)

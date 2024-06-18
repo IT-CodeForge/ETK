@@ -6,7 +6,7 @@ from .Internal.ETKBaseWidget import ETKBaseWidget
 
 from .Vector2d import Vector2d
 
-from .Internal.ETKBaseContainer import SizeError, PosError, ETKBaseContainer
+from .Internal.ETKBaseContainer import ETKBaseContainer
 
 
 class ETKContainer(ETKBaseContainer):
@@ -73,11 +73,11 @@ class ETKContainer(ETKBaseContainer):
         s_size = self.csize
 
         if (size.x > s_size.x and not s_size.dynamic_x) or (size.y > s_size.y and not s_size.dynamic_y):
-            raise SizeError(
+            raise self.SizeError(
                 f"size is outside of container {self}\nparameter: size: {size}; container: abs_pos: size: {self.size}")
 
         if (rel_pos.x + size.x > s_size.x and not s_size.dynamic_x) or (rel_pos.y + size.y > s_size.y and not s_size.dynamic_y) or rel_pos.x < 0 or rel_pos.y < 0:
-            raise PosError(
+            raise self.PosError(
                 f"pos is outside of container {self}\nparameter: rel_pos: {rel_pos}, size: {size}; container: size: {self.size}")
 
     def add_element(self, element: ETKBaseWidget, alignment: ETKBaseContainer.Alignments = ETKBaseContainer.Alignments.TOP_LEFT) -> None:

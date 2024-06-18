@@ -6,20 +6,18 @@ from .Internal.ETKMain import ETKMain
 
 from .Internal.ETKBaseWidget import ETKBaseWidget
 from .Vector2d import Vector2d
-from .Internal.ETKBaseContainer import ETKBaseContainer, SizeError
-
-
-class ElementPosLockedError(AttributeError):
-    pass
+from .Internal.ETKBaseContainer import ETKBaseContainer
 
 
 class ETKListingContainer(ETKBaseContainer):
+    class ElementPosLockedError(AttributeError):
+        pass
+
     class ListingTypes(Enum):
         TOP_TO_BOTTOM = auto()
         BOTTOM_TO_TOP = auto()
         LEFT_TO_RIGHT = auto()
         RIGHT_TO_LEFT = auto()
-
 
     def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: ETKListingContainer.ContainerSize = ETKBaseContainer.ContainerSize(0, 0, True, True), alignment: ETKBaseContainer.Alignments = ETKBaseContainer.Alignments.TOP_LEFT, listing_type: ListingTypes = ListingTypes.TOP_TO_BOTTOM, offset: int = 10, *, visibility: bool = True, enabled: bool = True, background_color: int = 0xAAAAAA, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
         self.__alignment = alignment
@@ -70,12 +68,12 @@ class ETKListingContainer(ETKBaseContainer):
         self._size = vec_size
         if self.parent != None:
             self.parent._validate_size(self, vec_size)
-        #self._background.size = self.size
+        # self._background.size = self.size
 
         self.__calulate_excess_space(int(listing_dir_size))
 
         if listing_dir_size > self.csize[listing_dir_index] or non_listing_dir_size > self.csize[non_listing_dir_index]:
-            raise SizeError(
+            raise self.SizeError(
                 f"size of container {self} is too small\ncontainer: size: {self.csize}; needed: {needed_size}")
 
         listing_dir_pos = self.__calculate_pos_part(
@@ -119,10 +117,10 @@ class ETKListingContainer(ETKBaseContainer):
             non_listing_dir_dynamic = self.csize.dynamic_y
 
         if needed_space[listing_dir_index] > 0 and needed_space[listing_dir_index] > self.__excess_space and not listing_dir_dynamic:
-            raise SizeError(
+            raise self.SizeError(
                 f"size of container {self} is too small\ncontainer: size: {self.csize}")
         if new_size[non_listing_dir_index] > self.size[non_listing_dir_index] and not non_listing_dir_dynamic:
-            raise SizeError(
+            raise self.SizeError(
                 f"size of container {self} is too small\ncontainer: size: {self.csize}")
 
     def __calulate_excess_space(self, used_space: int):
@@ -151,7 +149,7 @@ class ETKListingContainer(ETKBaseContainer):
     # region child validation methods
 
     def _validate_pos(self, element: ETKBaseWidget, new_pos: Vector2d) -> None:
-        raise ElementPosLockedError(
+        raise self.ElementPosLockedError(
             f"pos of element {element} is locked by ListingContainer {self}")
 
     def _validate_size(self, element: ETKBaseWidget, new_size: Vector2d) -> None:
