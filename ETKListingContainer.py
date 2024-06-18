@@ -13,13 +13,13 @@ class ETKListingContainer(ETKBaseContainer):
     class ElementPosLockedError(AttributeError):
         pass
 
-    class ListingTypes(Enum):
+    class LISTING_TYPES(Enum):
         TOP_TO_BOTTOM = auto()
         BOTTOM_TO_TOP = auto()
         LEFT_TO_RIGHT = auto()
         RIGHT_TO_LEFT = auto()
 
-    def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: ETKListingContainer.ContainerSize = ETKBaseContainer.ContainerSize(0, 0, True, True), alignment: ETKBaseContainer.ALIGNMENTS = ETKBaseContainer.ALIGNMENTS.TOP_LEFT, listing_type: ListingTypes = ListingTypes.TOP_TO_BOTTOM, offset: int = 10, *, visibility: bool = True, enabled: bool = True, background_color: int = 0xAAAAAA, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
+    def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: ETKListingContainer.ContainerSize = ETKBaseContainer.ContainerSize(0, 0, True, True), alignment: ETKBaseContainer.ALIGNMENTS = ETKBaseContainer.ALIGNMENTS.TOP_LEFT, listing_type: LISTING_TYPES = LISTING_TYPES.TOP_TO_BOTTOM, offset: int = 10, *, visibility: bool = True, enabled: bool = True, background_color: int = 0xAAAAAA, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
         self.__alignment = alignment
         self.__listing_type = listing_type
         self.__offset = offset
@@ -35,7 +35,7 @@ class ETKListingContainer(ETKBaseContainer):
         super().add_element(element)
 
     def _update_all_element_pos(self) -> None:
-        if self.__listing_type in [self.ListingTypes.TOP_TO_BOTTOM, self.ListingTypes.BOTTOM_TO_TOP]:
+        if self.__listing_type in [self.LISTING_TYPES.TOP_TO_BOTTOM, self.LISTING_TYPES.BOTTOM_TO_TOP]:
             listing_dir_index = 1
             non_listing_dir_index = 0
         else:
@@ -79,7 +79,7 @@ class ETKListingContainer(ETKBaseContainer):
         listing_dir_pos = self.__calculate_pos_part(
             listing_dir_index, listing_dir_size, (self.csize[4+2*listing_dir_index], self.csize[5+2*listing_dir_index]))
 
-        if self.__listing_type in [self.ListingTypes.BOTTOM_TO_TOP, self.ListingTypes.RIGHT_TO_LEFT]:
+        if self.__listing_type in [self.LISTING_TYPES.BOTTOM_TO_TOP, self.LISTING_TYPES.RIGHT_TO_LEFT]:
             elements = elements[::-1]
 
         for e in elements:
@@ -105,7 +105,7 @@ class ETKListingContainer(ETKBaseContainer):
     def __validate_element_size(self, old_size: Vector2d, new_size: Vector2d):
         needed_space = new_size - old_size
 
-        if self.__listing_type in [self.ListingTypes.TOP_TO_BOTTOM, self.ListingTypes.BOTTOM_TO_TOP]:
+        if self.__listing_type in [self.LISTING_TYPES.TOP_TO_BOTTOM, self.LISTING_TYPES.BOTTOM_TO_TOP]:
             listing_dir_index = 1
             non_listing_dir_index = 0
             listing_dir_dynamic = self.csize.dynamic_y
@@ -124,7 +124,7 @@ class ETKListingContainer(ETKBaseContainer):
                 f"size of container {self} is too small\ncontainer: size: {self.csize}")
 
     def __calulate_excess_space(self, used_space: int):
-        if self.__listing_type in [self.ListingTypes.TOP_TO_BOTTOM, self.ListingTypes.BOTTOM_TO_TOP]:
+        if self.__listing_type in [self.LISTING_TYPES.TOP_TO_BOTTOM, self.LISTING_TYPES.BOTTOM_TO_TOP]:
             listing_dir_index = 1
         else:
             listing_dir_index = 0
