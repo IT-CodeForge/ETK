@@ -34,20 +34,20 @@ class ETKBaseContainer(ETKBaseWidgetDisableable):
     # endregion
     # region Enums
 
-    class Alignments(Enum):
-        class _SubAlignments(Enum):
+    class ALIGNMENTS(Enum):
+        class _SUB_ALIGNMENTS(Enum):
             MIN = auto()
             MIDDLE = auto()
             MAX = auto()
-        TOP_LEFT = (_SubAlignments.MIN, _SubAlignments.MIN)
-        TOP_CENTER = (_SubAlignments.MIDDLE, _SubAlignments.MIN)
-        TOP_RIGHT = (_SubAlignments.MAX, _SubAlignments.MIN)
-        MIDDLE_LEFT = (_SubAlignments.MIN, _SubAlignments.MIDDLE)
-        MIDDLE_CENTER = (_SubAlignments.MIDDLE, _SubAlignments.MIDDLE)
-        MIDDLE_RIGHT = (_SubAlignments.MAX, _SubAlignments.MIDDLE)
-        BOTTOM_LEFT = (_SubAlignments.MIN, _SubAlignments.MAX)
-        BOTTOM_CENTER = (_SubAlignments.MIDDLE, _SubAlignments.MAX)
-        BOTTOM_RIGHT = (_SubAlignments.MAX, _SubAlignments.MAX)
+        TOP_LEFT = (_SUB_ALIGNMENTS.MIN, _SUB_ALIGNMENTS.MIN)
+        TOP_CENTER = (_SUB_ALIGNMENTS.MIDDLE, _SUB_ALIGNMENTS.MIN)
+        TOP_RIGHT = (_SUB_ALIGNMENTS.MAX, _SUB_ALIGNMENTS.MIN)
+        MIDDLE_LEFT = (_SUB_ALIGNMENTS.MIN, _SUB_ALIGNMENTS.MIDDLE)
+        MIDDLE_CENTER = (_SUB_ALIGNMENTS.MIDDLE, _SUB_ALIGNMENTS.MIDDLE)
+        MIDDLE_RIGHT = (_SUB_ALIGNMENTS.MAX, _SUB_ALIGNMENTS.MIDDLE)
+        BOTTOM_LEFT = (_SUB_ALIGNMENTS.MIN, _SUB_ALIGNMENTS.MAX)
+        BOTTOM_CENTER = (_SUB_ALIGNMENTS.MIDDLE, _SUB_ALIGNMENTS.MAX)
+        BOTTOM_RIGHT = (_SUB_ALIGNMENTS.MAX, _SUB_ALIGNMENTS.MAX)
 
     # endregion
 
