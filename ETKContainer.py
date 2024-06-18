@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Any, Literal
 
-from .ETKMainWindow import ETKMain
+from .Internal.ETKMain import ETKMain
 from .Internal.ETKBaseWidget import ETKBaseWidget
 
 from .Vector2d import Vector2d

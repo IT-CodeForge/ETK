@@ -9,7 +9,7 @@ from .ETKEventData import ETKEventData
 from .ETKBaseObject import ETKBaseObject, ETKEvents
 
 if TYPE_CHECKING:
-    from ..ETKMainWindow import ETKMain
+    from .ETKMain import ETKMain
 
 
 class ETKBaseTkObject(ETKBaseObject):

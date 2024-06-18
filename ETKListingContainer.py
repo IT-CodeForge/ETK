@@ -1,7 +1,7 @@
 from enum import Enum, auto
 from typing import Any
 
-from .ETKMainWindow import ETKMain
+from .Internal.ETKMain import ETKMain
 
 from .Internal.ETKBaseContainer import ETKAlignments
 from .Internal.ETKBaseWidget import ETKBaseWidget

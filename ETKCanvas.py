@@ -1,6 +1,6 @@
 from typing import Any
 
-from .ETKMainWindow import ETKMain
+from .Internal.ETKMain import ETKMain
 from .Vector2d import Vector2d
 from .Internal.ETKBaseTkWidgetDisableable import ETKBaseTkWidgetDisableable
 from .ETKCanvasItem import ETKCanvasItem

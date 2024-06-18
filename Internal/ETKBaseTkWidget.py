@@ -1,7 +1,7 @@
 from tkinter import Widget as tk_widget
 from typing import Any
 
-from ..ETKMainWindow import ETKMain
+from .ETKMain import ETKMain
 
 from .ETKUtils import gen_col_from_int
 

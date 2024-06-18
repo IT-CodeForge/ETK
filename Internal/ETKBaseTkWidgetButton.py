@@ -1,7 +1,7 @@
 from tkinter import FLAT, LabelFrame, Tk
 from typing import Any
 
-from ..ETKMainWindow import ETKMain
+from .ETKMain import ETKMain
 
 from .ETKUtils import gen_col_from_int
 from .ETKBaseTkWidgetDisableable import ETKBaseTkWidgetDisableable

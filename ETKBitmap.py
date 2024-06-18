@@ -1,4 +1,4 @@
-from .ETKMainWindow import ETKMain
+from .Internal.ETKMain import ETKMain
 from .Internal.ETKBaseTkWidgetDisableable import ETKBaseTkWidgetDisableable
 from .Internal.ETKUtils import gen_col_from_int
 from .Vector2d import Vector2d

@@ -4,7 +4,7 @@ from typing import Any
 
 from .Internal.ETKEventData import ETKEventData
 
-from .ETKMainWindow import ETKMain
+from .Internal.ETKMain import ETKMain
 from .Vector2d import Vector2d
 from .Internal.ETKBaseTkWidgetDisableable import ETKBaseTkWidgetDisableable
 from .Internal.ETKBaseObject import ETKEvents

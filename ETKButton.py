@@ -5,7 +5,7 @@ from .Internal.ETKEventData import ETKEventData
 
 from .Internal.ETKUtils import get_abs_event_pos, get_rel_event_pos  # type:ignore
 
-from .ETKMainWindow import ETKMain
+from .Internal.ETKMain import ETKMain
 
 from .Internal.ETKBaseObject import ETKEvents
 from .Internal.ETKBaseTkWidgetButton import ETKBaseTkWidgetButton

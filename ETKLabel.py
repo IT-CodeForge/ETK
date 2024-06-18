@@ -1,7 +1,7 @@
 from tkinter import END, Event, EventType, Text
 from typing import Any
 
-from .ETKMainWindow import ETKMain
+from .Internal.ETKMain import ETKMain
 from .Vector2d import Vector2d
 from .Internal.ETKBaseTkWidgetText import ETKBaseTkWidgetText
 from .Internal.ETKBaseObject import ETKEvents

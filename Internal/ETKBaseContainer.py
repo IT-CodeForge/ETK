@@ -3,7 +3,7 @@ from abc import abstractmethod
 from enum import Enum, auto
 from typing import Any, Callable
 
-from ..ETKMainWindow import ETKMain
+from .ETKMain import ETKMain
 from .ETKBaseObject import ETKEvents
 from .ETKEventData import ETKEventData
 

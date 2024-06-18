@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, Callable
 from ..Vector2d import Vector2d
 
 if TYPE_CHECKING:
-    from ..ETKMainWindow import ETKMain
+    from .ETKMain import ETKMain
     from .ETKEventData import ETKEventData
 
 

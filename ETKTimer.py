@@ -2,7 +2,7 @@ from threading import Thread
 from tkinter import Tk
 from typing import Any, Callable
 
-from .ETKMainWindow import ETKMain
+from .Internal.ETKMain import ETKMain
 
 
 class ETKTimer:

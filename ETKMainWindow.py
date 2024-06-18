@@ -11,6 +11,7 @@ from .Vector2d import Vector2d
 from .Internal.ETKBaseTkObject import ETKBaseTkObject
 from .Internal.ETKBaseObject import ETKEvents
 from .Internal.ETKEventData import ETKEventData
+from .Internal.ETKMain import ETKMain
 
 
 class ETKWindowEvents(ETKEvents):
@@ -25,27 +26,6 @@ class ETKWindowEvents(ETKEvents):
 
 
 class ETKMainWindow(ETKBaseTkObject):
-    class ETKMain:
-        def __init__(self, root_tk_object: Tk, scheduler: ETKScheduler, scale_factor: float) -> None:
-            self.__root_tk_object: Tk = root_tk_object
-            self.__scheduler: ETKScheduler = scheduler
-            self.__scale_factor: float = scale_factor
-
-        @property
-        def root_tk_object(self) -> Tk:
-            """READ-ONLY"""
-            return self.__root_tk_object
-
-        @property
-        def scheduler(self) -> ETKScheduler:
-            """READ-ONLY"""
-            return self.__scheduler
-
-        @property
-        def scale_factor(self) -> float:
-            """READ-ONLY"""
-            return self.__scale_factor
-
     def __init__(self, pos: Vector2d = Vector2d(0, 0), size: Optional[Vector2d] = None, caption: str = "Window-Title", fullscreen: bool = True, *, visibility: bool = True, background_color: int = 0xAAAAAA, scheduler_disabled: bool = False, scale_factor: float = 1, **kwargs: Any) -> None:
         from .ETKCanvas import ETKCanvas
         self._tk_object: Tk = Tk()
@@ -227,6 +207,3 @@ class ETKMainWindow(ETKBaseTkObject):
         super()._handle_tk_event(event)  # type:ignore
 
     # endregion
-
-
-ETKMain = ETKMainWindow.ETKMain

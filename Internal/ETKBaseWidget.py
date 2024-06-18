@@ -5,7 +5,7 @@ from ..Vector2d import Vector2d
 from .ETKBaseObject import ETKBaseObject
 
 if TYPE_CHECKING:
-    from ..ETKMainWindow import ETKMain
+    from .ETKMain import ETKMain
 
 
 class ETKBaseWidget(ETKBaseObject):
