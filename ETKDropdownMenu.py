@@ -12,8 +12,8 @@ from tkinter import _setit  # type:ignore
 
 
 class ETKDropdownMenu(ETKBaseTkWidgetDisableable):
-    class Events(ETKBaseTkWidgetDisableable.Events):
-        CHANGED: ETKDropdownMenu.Events
+    class EVENTS(ETKBaseTkWidgetDisableable.EVENTS):
+        CHANGED: ETKDropdownMenu.EVENTS
         _values = {"CHANGED": "<Custom>"}
 
     def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: Vector2d = Vector2d(70, 18), options: list[str] = [], start_value: str = "", *, visibility: bool = True, enabled: bool = True, background_color: int = 0xEEEEEE, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
@@ -28,7 +28,7 @@ class ETKDropdownMenu(ETKBaseTkWidgetDisableable):
         super().__init__(main=main, pos=pos, size=size, visibility=visibility, enabled=enabled, background_color=background_color, outline_color=outline_color, outline_thickness=outline_thickness, **kwargs)
 
         self.__selected_var.trace("w", self.__clicked_changed)  # type:ignore
-        self._event_lib.update({e: [] for e in self.Events if e not in self._event_lib.keys()})
+        self._event_lib.update({e: [] for e in self.EVENTS if e not in self._event_lib.keys()})
 
     @property
     def options(self) -> list[str]:
@@ -67,6 +67,6 @@ class ETKDropdownMenu(ETKBaseTkWidgetDisableable):
 
     def __clicked_changed(self, *args: str) -> None:
         if not self.__ignore_next_change_event:
-            self._handle_event(ETKEventData(self, self.Events.CHANGED))
+            self._handle_event(ETKEventData(self, self.EVENTS.CHANGED))
         else:
             self.__ignore_next_change_event = False

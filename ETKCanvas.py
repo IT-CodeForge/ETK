@@ -13,7 +13,7 @@ from tkinter import Canvas
 
 
 class ETKCanvas(ETKBaseTkWidgetDisableable):
-    class Events(ETKBaseTkWidgetDisableable.Events):
+    class EVENTS(ETKBaseTkWidgetDisableable.EVENTS):
         pass
 
     def __init__(self, main: ETKMain, pos: Vector2d, size: Vector2d, *, visibility: bool = True, enabled: bool = True, background_color: int = 0xFFFFFF, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:

@@ -30,14 +30,14 @@ class ETKBaseTkObject(ETKBaseObject):
 
     # region Eventhandling Methods
 
-    def add_event(self, event_type: ETKBaseObject.Events, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
+    def add_event(self, event_type: ETKBaseObject.EVENTS, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
         if event_type.value != "<Custom>":
             if len(self._event_lib[event_type]) == 0:
                 self._tk_object.bind(
                     event_type.value, self._handle_tk_event)  # type:ignore
         super().add_event(event_type, eventhandler)
 
-    def remove_event(self, event_type: ETKBaseObject.Events, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
+    def remove_event(self, event_type: ETKBaseObject.EVENTS, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
         super().remove_event(event_type, eventhandler)
         if event_type.value != "<Custom>":
             if len(self._event_lib[event_type]) == 0:
@@ -46,19 +46,19 @@ class ETKBaseTkObject(ETKBaseObject):
     def _handle_tk_event(self, event: Event) -> None:  # type:ignore
         match event.type:
             case EventType.ButtonPress:
-                event_type = self.Events.MOUSE_DOWN
+                event_type = self.EVENTS.MOUSE_DOWN
                 ev_data = ETKEventData(self, event_type, tk_event=event, state=event.state, btn_num=event.num, rel_pos=get_rel_event_pos(event, self._main.scale_factor), abs_pos=get_abs_event_pos(event, self._main.root_tk_object, self._main.scale_factor))
             case EventType.ButtonRelease:
-                event_type = self.Events.MOUSE_UP
+                event_type = self.EVENTS.MOUSE_UP
                 ev_data = ETKEventData(self, event_type, tk_event=event, state=event.state, btn_num=event.num, rel_pos=get_rel_event_pos(event, self._main.scale_factor), abs_pos=get_abs_event_pos(event, self._main.root_tk_object, self._main.scale_factor))
             case EventType.Enter:
-                event_type = self.Events.ENTER
+                event_type = self.EVENTS.ENTER
                 ev_data = ETKEventData(self, event_type, tk_event=event, state=event.focus, rel_pos=get_rel_event_pos(event, self._main.scale_factor), abs_pos=get_abs_event_pos(event, self._main.root_tk_object, self._main.scale_factor))
             case EventType.Leave:
-                event_type = self.Events.LEAVE
+                event_type = self.EVENTS.LEAVE
                 ev_data = ETKEventData(self, event_type, tk_event=event, state=event.focus, rel_pos=get_rel_event_pos(event, self._main.scale_factor), abs_pos=get_abs_event_pos(event, self._main.root_tk_object, self._main.scale_factor))
             case EventType.Motion:
-                event_type = self.Events.MOUSE_MOVED
+                event_type = self.EVENTS.MOUSE_MOVED
                 ev_data = ETKEventData(self, event_type, tk_event=event, state=event.state, rel_pos=get_rel_event_pos(event, self._main.scale_factor), abs_pos=get_abs_event_pos(event, self._main.root_tk_object, self._main.scale_factor))
             case _:
                 raise ValueError(f"invalid event {event}")

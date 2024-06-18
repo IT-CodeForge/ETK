@@ -51,7 +51,7 @@ class ETKBaseContainer(ETKBaseWidgetDisableable):
 
     # endregion
 
-    class Events(ETKBaseWidgetDisableable.Events):
+    class EVENTS(ETKBaseWidgetDisableable.EVENTS):
         pass
 
     # region Dataclass: ContainerSize
@@ -261,13 +261,13 @@ class ETKBaseContainer(ETKBaseWidgetDisableable):
         self._main.scheduler.schedule_action(element._update_pos)
         self._main.scheduler.schedule_action(self._update_all_element_pos)
 
-    def add_event(self, event_type: ETKBaseObject.Events, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
+    def add_event(self, event_type: ETKBaseObject.EVENTS, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
         super().add_event(event_type, eventhandler)
         self._background.add_event(event_type, self.__event_handler)
         for e in self._element_rel_pos.keys():
             e.add_event(event_type, self.__event_handler)
 
-    def remove_event(self, event_type: ETKBaseObject.Events, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
+    def remove_event(self, event_type: ETKBaseObject.EVENTS, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
         super().remove_event(event_type, eventhandler)
         self._background.remove_event(event_type, self.__event_handler)
         for e in self._element_rel_pos.keys():

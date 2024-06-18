@@ -14,13 +14,13 @@ from .Internal.ETKMain import ETKMain
 
 
 class ETKMainWindow(ETKBaseTkObject):
-    class Events(ETKBaseTkObject.Events):
-        KEY_PRESSED: ETKMainWindow.Events
-        KEY_RELEASED: ETKMainWindow.Events
-        FOCUS_IN: ETKMainWindow.Events
-        FOCUS_OUT: ETKMainWindow.Events
-        START: ETKMainWindow.Events
-        EXIT: ETKMainWindow.Events
+    class EVENTS(ETKBaseTkObject.EVENTS):
+        KEY_PRESSED: ETKMainWindow.EVENTS
+        KEY_RELEASED: ETKMainWindow.EVENTS
+        FOCUS_IN: ETKMainWindow.EVENTS
+        FOCUS_OUT: ETKMainWindow.EVENTS
+        START: ETKMainWindow.EVENTS
+        EXIT: ETKMainWindow.EVENTS
 
         _values = {"KEY_PRESSED": "<KeyPress>", "KEY_RELEASED": "<KeyRelease>", "FOCUS_IN": "<FocusIn>", "FOCUS_OUT": "<FocusOut>", "START": "<Custom>", "EXIT": "<Custom>"}
 
@@ -48,7 +48,7 @@ class ETKMainWindow(ETKBaseTkObject):
         self.size = size
         self.fullscreen = fullscreen
         self._tk_object.protocol("WM_DELETE_WINDOW", self.exit)
-        self._event_lib.update({e: [] for e in self.Events if e not in self._event_lib.keys()})
+        self._event_lib.update({e: [] for e in self.EVENTS if e not in self._event_lib.keys()})
         self._tk_object.bind(
             "<Configure>", self.__configure_event_handler)  # type:ignore
 
@@ -56,12 +56,12 @@ class ETKMainWindow(ETKBaseTkObject):
         default_font.configure(size=int(10 * self._main.scale_factor))
         self._tk_object.option_add("*Font", default_font)  # type:ignore
 
-        class InternalEvents(self.Events):
+        class InternalEvents(self.EVENTS):
             INTERNAL_EVENT: InternalEvents
             _values = {"INTERNAL_EVENT": "<Custom>"}
 
         self._main.scheduler.schedule_event(lambda: self._add_elements(), ETKEventData(self, InternalEvents.INTERNAL_EVENT))
-        self._main.scheduler.schedule_event(lambda: self._handle_event(ETKEventData(self, self.Events.START)), ETKEventData(self, InternalEvents.INTERNAL_EVENT))
+        self._main.scheduler.schedule_event(lambda: self._handle_event(ETKEventData(self, self.EVENTS.START)), ETKEventData(self, InternalEvents.INTERNAL_EVENT))
 
     # region Properties
 
@@ -159,7 +159,7 @@ class ETKMainWindow(ETKBaseTkObject):
         self._tk_object.mainloop()
 
     def exit(self) -> None:
-        self._handle_event(ETKEventData(self, self.Events.EXIT), ignore_scheduler=True)
+        self._handle_event(ETKEventData(self, self.EVENTS.EXIT), ignore_scheduler=True)
         if not self.exit_locked and not self.exit_ignore_next:
             self._main.scheduler.exit()
         if self.exit_ignore_next:
@@ -189,16 +189,16 @@ class ETKMainWindow(ETKBaseTkObject):
     def _handle_tk_event(self, event: Event) -> None:  # type:ignore
         match event.type:
             case EventType.KeyPress:
-                self._handle_event(ETKEventData(self, self.Events.KEY_PRESSED, tk_event=event, state=event.state, keysym=event.keysym, keycode=event.keycode, keychar=event.char, rel_pos=get_rel_event_pos(event, self._main.scale_factor), abs_pos=get_abs_event_pos(event, self._main.root_tk_object, self._main.scale_factor)))
+                self._handle_event(ETKEventData(self, self.EVENTS.KEY_PRESSED, tk_event=event, state=event.state, keysym=event.keysym, keycode=event.keycode, keychar=event.char, rel_pos=get_rel_event_pos(event, self._main.scale_factor), abs_pos=get_abs_event_pos(event, self._main.root_tk_object, self._main.scale_factor)))
                 return
             case EventType.KeyRelease:
-                self._handle_event(ETKEventData(self, self.Events.KEY_RELEASED, tk_event=event, state=event.state, keysym=event.keysym, keycode=event.keycode, keychar=event.char, rel_pos=get_rel_event_pos(event, self._main.scale_factor), abs_pos=get_abs_event_pos(event, self._main.root_tk_object, self._main.scale_factor)))
+                self._handle_event(ETKEventData(self, self.EVENTS.KEY_RELEASED, tk_event=event, state=event.state, keysym=event.keysym, keycode=event.keycode, keychar=event.char, rel_pos=get_rel_event_pos(event, self._main.scale_factor), abs_pos=get_abs_event_pos(event, self._main.root_tk_object, self._main.scale_factor)))
                 return
             case EventType.FocusIn:
-                self._handle_event(ETKEventData(self, self.Events.FOCUS_IN, tk_event=event))
+                self._handle_event(ETKEventData(self, self.EVENTS.FOCUS_IN, tk_event=event))
                 return
             case EventType.FocusOut:
-                self._handle_event(ETKEventData(self, self.Events.FOCUS_OUT, tk_event=event))
+                self._handle_event(ETKEventData(self, self.EVENTS.FOCUS_OUT, tk_event=event))
                 return
             case _:
                 pass
