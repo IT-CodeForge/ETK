@@ -13,31 +13,9 @@ from .ETKBaseWidgetDisableable import ETKBaseWidgetDisableable
 from ..ETKCanvas import ETKCanvas
 from .ETKBaseObject import ETKEvents
 
+
 class ETKContainerEvents(ETKEvents):
     pass
-
-
-# region Enums
-
-
-class _ETKSubAlignments(Enum):
-    MIN = auto()
-    MIDDLE = auto()
-    MAX = auto()
-
-
-class ETKAlignments(Enum):
-    TOP_LEFT = (_ETKSubAlignments.MIN, _ETKSubAlignments.MIN)
-    TOP_CENTER = (_ETKSubAlignments.MIDDLE, _ETKSubAlignments.MIN)
-    TOP_RIGHT = (_ETKSubAlignments.MAX, _ETKSubAlignments.MIN)
-    MIDDLE_LEFT = (_ETKSubAlignments.MIN, _ETKSubAlignments.MIDDLE)
-    MIDDLE_CENTER = (_ETKSubAlignments.MIDDLE, _ETKSubAlignments.MIDDLE)
-    MIDDLE_RIGHT = (_ETKSubAlignments.MAX, _ETKSubAlignments.MIDDLE)
-    BOTTOM_LEFT = (_ETKSubAlignments.MIN, _ETKSubAlignments.MAX)
-    BOTTOM_CENTER = (_ETKSubAlignments.MIDDLE, _ETKSubAlignments.MAX)
-    BOTTOM_RIGHT = (_ETKSubAlignments.MAX, _ETKSubAlignments.MAX)
-
-# endregion
 
 # region Dataclass: ContainerSize
 
@@ -160,6 +138,26 @@ class PosError(ValueError):
 
 
 class ETKBaseContainer(ETKBaseWidgetDisableable):
+    # region Enums
+
+    class Alignments(Enum):
+        class _SubAlignments(Enum):
+            MIN = auto()
+            MIDDLE = auto()
+            MAX = auto()
+        TOP_LEFT = (_SubAlignments.MIN, _SubAlignments.MIN)
+        TOP_CENTER = (_SubAlignments.MIDDLE, _SubAlignments.MIN)
+        TOP_RIGHT = (_SubAlignments.MAX, _SubAlignments.MIN)
+        MIDDLE_LEFT = (_SubAlignments.MIN, _SubAlignments.MIDDLE)
+        MIDDLE_CENTER = (_SubAlignments.MIDDLE, _SubAlignments.MIDDLE)
+        MIDDLE_RIGHT = (_SubAlignments.MAX, _SubAlignments.MIDDLE)
+        BOTTOM_LEFT = (_SubAlignments.MIN, _SubAlignments.MAX)
+        BOTTOM_CENTER = (_SubAlignments.MIDDLE, _SubAlignments.MAX)
+        BOTTOM_RIGHT = (_SubAlignments.MAX, _SubAlignments.MAX)
+
+    # endregion
+    # endregion
+
     def __init__(self, *, main: ETKMain, pos: Vector2d, csize: ETKContainerSize, visibility: bool, enabled: bool, background_color: int, outline_color: int, outline_thickness: int, **kwargs: Any) -> None:
         self._background = ETKCanvas(main, pos, csize.vec, background_color=background_color)
         self._container_size: ETKContainerSize = ETKContainerSize(0, 0)

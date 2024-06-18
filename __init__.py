@@ -16,7 +16,7 @@ from .ETKCanvasOval import ETKCanvasOval
 from .ETKCanvasRectangle import ETKCanvasRectangle
 from .ETKCanvasSquare import ETKCanvasSquare
 from .ETKCheckbox import ETKCheckbox, ETKCheckboxEvents
-from .Internal.ETKBaseContainer import ETKAlignments, ETKContainerSize, ETKBaseContainer, ETKContainerEvents
+from .Internal.ETKBaseContainer import ETKContainerSize, ETKBaseContainer, ETKContainerEvents
 from .ETKContainer import ETKContainer
 from .ETKEdit import ETKEdit, ETKEditEvents
 from .ETKLabel import ETKLabel, ETKLabelEvents
@@ -40,8 +40,8 @@ if __name__ == "__main__":
     ETKCanvasSquare.background_color
     ETKCheckbox.abs_enabled
     ETKCheckboxEvents.CHECKED
-    ETKAlignments.BOTTOM_CENTER
     ETKContainerSize.copy
+    
     ETKContainer.abs_enabled
     ETKEdit.abs_enabled
     ETKEditEvents.CHANGED

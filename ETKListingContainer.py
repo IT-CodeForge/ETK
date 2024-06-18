@@ -1,13 +1,13 @@
+from __future__ import annotations
 from enum import Enum, auto
 from typing import Any
 
 from .Internal.ETKMain import ETKMain
 
-from .Internal.ETKBaseContainer import ETKAlignments
 from .Internal.ETKBaseWidget import ETKBaseWidget
 from .ETKContainer import ETKContainerSize
 from .Vector2d import Vector2d
-from .Internal.ETKBaseContainer import ETKBaseContainer, _ETKSubAlignments, SizeError  # type:ignore
+from .Internal.ETKBaseContainer import ETKBaseContainer, SizeError
 
 
 class ElementPosLockedError(AttributeError):
@@ -22,7 +22,7 @@ class ETKListingTypes(Enum):
 
 
 class ETKListingContainer(ETKBaseContainer):
-    def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: ETKContainerSize = ETKContainerSize(0, 0, True, True), alignment: ETKAlignments = ETKAlignments.TOP_LEFT, listing_type: ETKListingTypes = ETKListingTypes.TOP_TO_BOTTOM, offset: int = 10, *, visibility: bool = True, enabled: bool = True, background_color: int = 0xAAAAAA, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
+    def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: ETKContainerSize = ETKContainerSize(0, 0, True, True), alignment: ETKBaseContainer.Alignments = ETKBaseContainer.Alignments.TOP_LEFT, listing_type: ETKListingTypes = ETKListingTypes.TOP_TO_BOTTOM, offset: int = 10, *, visibility: bool = True, enabled: bool = True, background_color: int = 0xAAAAAA, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
         self.__alignment = alignment
         self.__listing_type = listing_type
         self.__offset = offset
@@ -98,11 +98,11 @@ class ETKListingContainer(ETKBaseContainer):
 
     def __calculate_pos_part(self, index: int, size_part: float, padding_part: tuple[float, float]) -> float:
         match self.__alignment.value[index]:
-            case _ETKSubAlignments.MIN:
+            case ETKBaseContainer.Alignments._SubAlignments.MIN:  # type:ignore
                 return padding_part[0]
-            case _ETKSubAlignments.MIDDLE:
+            case ETKBaseContainer.Alignments._SubAlignments.MIDDLE:  # type:ignore
                 return 0.5 * (self.csize[index] - padding_part[0] - padding_part[1]) - 0.5 * size_part + padding_part[0]
-            case _ETKSubAlignments.MAX:
+            case ETKBaseContainer.Alignments._SubAlignments.MAX:  # type:ignore
                 return self.csize[index] - size_part - padding_part[1]
 
     def __validate_element_size(self, old_size: Vector2d, new_size: Vector2d):
