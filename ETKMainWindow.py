@@ -56,12 +56,12 @@ class ETKMainWindow(ETKBaseTkObject):
         default_font.configure(size=int(10 * self._main.scale_factor))
         self._tk_object.option_add("*Font", default_font)  # type:ignore
 
-        class InternalEvents(self.EVENTS):
-            INTERNAL_EVENT: InternalEvents
+        class INTERNAL_EVENTS(self.EVENTS):
+            INTERNAL_EVENT: INTERNAL_EVENTS
             _values = {"INTERNAL_EVENT": "<Custom>"}
 
-        self._main.scheduler.schedule_event(lambda: self._add_elements(), ETKEventData(self, InternalEvents.INTERNAL_EVENT))
-        self._main.scheduler.schedule_event(lambda: self._handle_event(ETKEventData(self, self.EVENTS.START)), ETKEventData(self, InternalEvents.INTERNAL_EVENT))
+        self._main.scheduler.schedule_event(lambda: self._add_elements(), ETKEventData(self, INTERNAL_EVENTS.INTERNAL_EVENT))
+        self._main.scheduler.schedule_event(lambda: self._handle_event(ETKEventData(self, self.EVENTS.START)), ETKEventData(self, INTERNAL_EVENTS.INTERNAL_EVENT))
 
     # region Properties
 
