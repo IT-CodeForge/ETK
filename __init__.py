@@ -20,7 +20,7 @@ from .Internal.ETKBaseContainer import ETKBaseContainer, ETKContainerEvents
 from .ETKContainer import ETKContainer
 from .ETKEdit import ETKEdit, ETKEditEvents
 from .ETKLabel import ETKLabel, ETKLabelEvents
-from .ETKListingContainer import ETKListingContainer, ETKListingTypes
+from .ETKListingContainer import ETKListingContainer
 from .ETKMainWindow import ETKMainWindow, ETKWindowEvents
 from .ETKTimer import ETKTimer
 from .Vector2d import Vector2d
@@ -45,7 +45,6 @@ if __name__ == "__main__":
     ETKEditEvents.CHANGED
     ETKLabel.abs_enabled
     ETKListingContainer.abs_enabled
-    ETKListingTypes.BOTTOM_TO_TOP
     ETKMainWindow.abs_pos
     ETKWindowEvents.EXIT
     ETKTimer.mro
