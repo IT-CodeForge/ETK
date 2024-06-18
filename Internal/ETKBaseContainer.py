@@ -17,101 +17,6 @@ from .ETKBaseObject import ETKEvents
 class ETKContainerEvents(ETKEvents):
     pass
 
-# region Dataclass: ContainerSize
-
-
-class ETKContainerSize():
-    def __init__(self, x: int | float = 0, y: int | float = 0, dynamic_x: bool = False, dynamic_y: bool = False, paddings_x_l: int = 0, paddings_x_r: int = 0, paddings_y_o: int = 0, paddings_y_u: int = 0) -> None:
-        self.__x: int = 0
-        self.__y: int = 0
-        self.x = x
-        self.y = y
-        self.dynamic_x: bool = dynamic_x
-        self.dynamic_y: bool = dynamic_y
-        self.padding_x_l: int = paddings_x_l
-        self.padding_x_r: int = paddings_x_r
-        self.padding_y_o: int = paddings_y_o
-        self.padding_y_u: int = paddings_y_u
-
-    @property
-    def x(self) -> int:
-        return self.__x
-
-    @x.setter
-    def x(self, value: int | float) -> None:
-        self.__x = int(value)
-
-    @property
-    def y(self) -> int:
-        return self.__y
-
-    @y.setter
-    def y(self, value: int | float) -> None:
-        self.__y = int(value)
-
-    @staticmethod
-    def from_vector2d(vec: Vector2d) -> ETKContainerSize:
-        return ETKContainerSize(vec.x, vec.y)
-
-    def copy(self) -> ETKContainerSize:
-        return ETKContainerSize(self.x, self.y, self.dynamic_x, self.dynamic_y, self.padding_x_l, self.padding_x_r, self.padding_y_o, self.padding_y_u)
-
-    @property
-    def vec(self) -> Vector2d:
-        """READ-ONLY"""
-        return Vector2d(self.x, self.y)
-
-    def __str__(self) -> str:
-        return f"<{self.x}, {self.y}, {self.dynamic_x}, {self.dynamic_y}, {self.padding_x_l}, {self.padding_x_r}, {self.padding_y_o}, {self.padding_y_u}>"
-
-    def __setitem__(self, address: int, other: int | bool | float) -> None:
-        if address not in range(0, 8):
-            raise KeyError("Invalid index")
-        match address:
-            case 0:
-                self.x = other
-            case 1:
-                self.y = other
-            case 2:
-                self.dynamic_x = bool(other)
-            case 3:
-                self.dynamic_y = bool(other)
-            case 4:
-                self.padding_x_l = int(other)
-            case 5:
-                self.padding_x_r = int(other)
-            case 6:
-                self.padding_y_o = int(other)
-            case 7:
-                self.padding_y_u = int(other)
-            case _:
-                pass
-
-    def __getitem__(self, address: int) -> int | bool:
-        if address not in range(0, 8):
-            raise KeyError("Invalid index")
-        match address:
-            case 0:
-                return self.x
-            case 1:
-                return self.y
-            case 2:
-                return self.dynamic_x
-            case 3:
-                return self.dynamic_y
-            case 4:
-                return self.padding_x_l
-            case 5:
-                return self.padding_x_r
-            case 6:
-                return self.padding_y_o
-            case 7:
-                return self.padding_y_u
-            case _:
-                raise KeyError
-
-# endregion
-
 # region ExceptionTypes
 
 
@@ -156,11 +61,103 @@ class ETKBaseContainer(ETKBaseWidgetDisableable):
         BOTTOM_RIGHT = (_SubAlignments.MAX, _SubAlignments.MAX)
 
     # endregion
+    # region Dataclass: ContainerSize
+
+    class ContainerSize():
+        def __init__(self, x: int | float = 0, y: int | float = 0, dynamic_x: bool = False, dynamic_y: bool = False, paddings_x_l: int = 0, paddings_x_r: int = 0, paddings_y_o: int = 0, paddings_y_u: int = 0) -> None:
+            self.__x: int = 0
+            self.__y: int = 0
+            self.x = x
+            self.y = y
+            self.dynamic_x: bool = dynamic_x
+            self.dynamic_y: bool = dynamic_y
+            self.padding_x_l: int = paddings_x_l
+            self.padding_x_r: int = paddings_x_r
+            self.padding_y_o: int = paddings_y_o
+            self.padding_y_u: int = paddings_y_u
+
+        @property
+        def x(self) -> int:
+            return self.__x
+
+        @x.setter
+        def x(self, value: int | float) -> None:
+            self.__x = int(value)
+
+        @property
+        def y(self) -> int:
+            return self.__y
+
+        @y.setter
+        def y(self, value: int | float) -> None:
+            self.__y = int(value)
+
+        @classmethod
+        def from_vector2d(cls, vec: Vector2d) -> ETKBaseContainer.ContainerSize:
+            return cls(vec.x, vec.y)
+
+        def copy(self) -> ETKBaseContainer.ContainerSize:
+            return type(self)(self.x, self.y, self.dynamic_x, self.dynamic_y, self.padding_x_l, self.padding_x_r, self.padding_y_o, self.padding_y_u)
+
+        @property
+        def vec(self) -> Vector2d:
+            """READ-ONLY"""
+            return Vector2d(self.x, self.y)
+
+        def __str__(self) -> str:
+            return f"<{self.x}, {self.y}, {self.dynamic_x}, {self.dynamic_y}, {self.padding_x_l}, {self.padding_x_r}, {self.padding_y_o}, {self.padding_y_u}>"
+
+        def __setitem__(self, address: int, other: int | bool | float) -> None:
+            if address not in range(0, 8):
+                raise KeyError("Invalid index")
+            match address:
+                case 0:
+                    self.x = other
+                case 1:
+                    self.y = other
+                case 2:
+                    self.dynamic_x = bool(other)
+                case 3:
+                    self.dynamic_y = bool(other)
+                case 4:
+                    self.padding_x_l = int(other)
+                case 5:
+                    self.padding_x_r = int(other)
+                case 6:
+                    self.padding_y_o = int(other)
+                case 7:
+                    self.padding_y_u = int(other)
+                case _:
+                    pass
+
+        def __getitem__(self, address: int) -> int | bool:
+            if address not in range(0, 8):
+                raise KeyError("Invalid index")
+            match address:
+                case 0:
+                    return self.x
+                case 1:
+                    return self.y
+                case 2:
+                    return self.dynamic_x
+                case 3:
+                    return self.dynamic_y
+                case 4:
+                    return self.padding_x_l
+                case 5:
+                    return self.padding_x_r
+                case 6:
+                    return self.padding_y_o
+                case 7:
+                    return self.padding_y_u
+                case _:
+                    raise KeyError
+
     # endregion
 
-    def __init__(self, *, main: ETKMain, pos: Vector2d, csize: ETKContainerSize, visibility: bool, enabled: bool, background_color: int, outline_color: int, outline_thickness: int, **kwargs: Any) -> None:
+    def __init__(self, *, main: ETKMain, pos: Vector2d, csize: ContainerSize, visibility: bool, enabled: bool, background_color: int, outline_color: int, outline_thickness: int, **kwargs: Any) -> None:
         self._background = ETKCanvas(main, pos, csize.vec, background_color=background_color)
-        self._container_size: ETKContainerSize = ETKContainerSize(0, 0)
+        self._container_size: ETKBaseContainer.ContainerSize = self.ContainerSize(0, 0)
         self._element_rel_pos: dict[ETKBaseWidget, Vector2d] = {}
 
         super().__init__(main=main, pos=pos, size=csize.vec, visibility=visibility, enabled=enabled, background_color=background_color, **kwargs)
@@ -181,16 +178,16 @@ class ETKBaseContainer(ETKBaseWidgetDisableable):
         self.csize = value
 
     @property
-    def csize(self) -> ETKContainerSize:  # type:ignore
+    def csize(self) -> ContainerSize:  # type:ignore
         return self._container_size.copy()
 
     @csize.setter
-    def csize(self, value: ETKContainerSize | Vector2d) -> None:
-        if type(value) == ETKContainerSize:
+    def csize(self, value: ContainerSize | Vector2d) -> None:
+        if type(value) == self.ContainerSize:
             self._container_size = value
             vec = value.vec
         else:
-            self._container_size = ETKContainerSize(int(value.x), int(value.y))
+            self._container_size = self.ContainerSize(int(value.x), int(value.y))
             vec = value
         ETKBaseWidgetDisableable.size.fset(self, vec)  # type:ignore
 

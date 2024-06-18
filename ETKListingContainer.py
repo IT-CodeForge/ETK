@@ -5,7 +5,6 @@ from typing import Any
 from .Internal.ETKMain import ETKMain
 
 from .Internal.ETKBaseWidget import ETKBaseWidget
-from .ETKContainer import ETKContainerSize
 from .Vector2d import Vector2d
 from .Internal.ETKBaseContainer import ETKBaseContainer, SizeError
 
@@ -22,7 +21,7 @@ class ETKListingTypes(Enum):
 
 
 class ETKListingContainer(ETKBaseContainer):
-    def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: ETKContainerSize = ETKContainerSize(0, 0, True, True), alignment: ETKBaseContainer.Alignments = ETKBaseContainer.Alignments.TOP_LEFT, listing_type: ETKListingTypes = ETKListingTypes.TOP_TO_BOTTOM, offset: int = 10, *, visibility: bool = True, enabled: bool = True, background_color: int = 0xAAAAAA, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
+    def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: ETKListingContainer.ContainerSize = ETKBaseContainer.ContainerSize(0, 0, True, True), alignment: ETKBaseContainer.Alignments = ETKBaseContainer.Alignments.TOP_LEFT, listing_type: ETKListingTypes = ETKListingTypes.TOP_TO_BOTTOM, offset: int = 10, *, visibility: bool = True, enabled: bool = True, background_color: int = 0xAAAAAA, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
         self.__alignment = alignment
         self.__listing_type = listing_type
         self.__offset = offset
