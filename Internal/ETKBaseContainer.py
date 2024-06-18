@@ -4,18 +4,13 @@ from enum import Enum, auto
 from typing import Any, Callable
 
 from .ETKMain import ETKMain
-from .ETKBaseObject import ETKEvents
+from .ETKBaseObject import ETKBaseObject
 from .ETKEventData import ETKEventData
 
 from .ETKBaseWidget import ETKBaseWidget
 from ..Vector2d import Vector2d
 from .ETKBaseWidgetDisableable import ETKBaseWidgetDisableable
 from ..ETKCanvas import ETKCanvas
-from .ETKBaseObject import ETKEvents
-
-
-class ETKContainerEvents(ETKEvents):
-    pass
 
 
 class ETKBaseContainer(ETKBaseWidgetDisableable):
@@ -55,6 +50,10 @@ class ETKBaseContainer(ETKBaseWidgetDisableable):
         BOTTOM_RIGHT = (_SubAlignments.MAX, _SubAlignments.MAX)
 
     # endregion
+
+    class Events(ETKBaseWidgetDisableable.Events):
+        pass
+
     # region Dataclass: ContainerSize
 
     class ContainerSize():
@@ -262,13 +261,13 @@ class ETKBaseContainer(ETKBaseWidgetDisableable):
         self._main.scheduler.schedule_action(element._update_pos)
         self._main.scheduler.schedule_action(self._update_all_element_pos)
 
-    def add_event(self, event_type: ETKEvents, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
+    def add_event(self, event_type: ETKBaseObject.Events, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
         super().add_event(event_type, eventhandler)
         self._background.add_event(event_type, self.__event_handler)
         for e in self._element_rel_pos.keys():
             e.add_event(event_type, self.__event_handler)
 
-    def remove_event(self, event_type: ETKEvents, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
+    def remove_event(self, event_type: ETKBaseObject.Events, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
         super().remove_event(event_type, eventhandler)
         self._background.remove_event(event_type, self.__event_handler)
         for e in self._element_rel_pos.keys():

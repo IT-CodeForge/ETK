@@ -7,17 +7,15 @@ from .Internal.ETKEventData import ETKEventData
 from .Internal.ETKMain import ETKMain
 from .Vector2d import Vector2d
 from .Internal.ETKBaseTkWidgetDisableable import ETKBaseTkWidgetDisableable
-from .Internal.ETKBaseObject import ETKEvents
 from tkinter import OptionMenu, StringVar
-from tkinter import _setit #type:ignore
-
-
-class ETKDropdownMenuEvents(ETKEvents):
-    CHANGED: ETKDropdownMenuEvents
-    _values = {"CHANGED": "<Custom>"}
+from tkinter import _setit  # type:ignore
 
 
 class ETKDropdownMenu(ETKBaseTkWidgetDisableable):
+    class Events(ETKBaseTkWidgetDisableable.Events):
+        CHANGED: ETKDropdownMenu.Events
+        _values = {"CHANGED": "<Custom>"}
+
     def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: Vector2d = Vector2d(70, 18), options: list[str] = [], start_value: str = "", *, visibility: bool = True, enabled: bool = True, background_color: int = 0xEEEEEE, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
         self.__selected_var = StringVar(value=start_value)
         self.__selected = start_value
@@ -30,12 +28,12 @@ class ETKDropdownMenu(ETKBaseTkWidgetDisableable):
         super().__init__(main=main, pos=pos, size=size, visibility=visibility, enabled=enabled, background_color=background_color, outline_color=outline_color, outline_thickness=outline_thickness, **kwargs)
 
         self.__selected_var.trace("w", self.__clicked_changed)  # type:ignore
-        self._event_lib.update({e: [] for e in ETKDropdownMenuEvents if e not in self._event_lib.keys()})
+        self._event_lib.update({e: [] for e in self.Events if e not in self._event_lib.keys()})
 
     @property
     def options(self) -> list[str]:
         return self.__options
-    
+
     @options.setter
     def options(self, value: list[str]) -> None:
         if self.__options == value:
@@ -48,14 +46,14 @@ class ETKDropdownMenu(ETKBaseTkWidgetDisableable):
     @property
     def selected(self) -> str:
         return self.__selected_var.get()
-    
+
     @selected.setter
     def selected(self, value: str) -> None:
         if self.selected == value:
             return
         self.__selected = value
         self._main.scheduler.schedule_action(self.__update_selected)
-    
+
     def __update_selected(self):
         self.__ignore_next_change_event = True
         self.__selected_var.set(self.__selected)
@@ -69,7 +67,6 @@ class ETKDropdownMenu(ETKBaseTkWidgetDisableable):
 
     def __clicked_changed(self, *args: str) -> None:
         if not self.__ignore_next_change_event:
-            self._handle_event(ETKEventData(self, ETKDropdownMenuEvents.CHANGED))
+            self._handle_event(ETKEventData(self, self.Events.CHANGED))
         else:
             self.__ignore_next_change_event = False
-

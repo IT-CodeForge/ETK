@@ -4,14 +4,14 @@ from typing import Optional
 
 from ..Vector2d import Vector2d
 
-from .ETKBaseObject import ETKBaseObject, ETKEvents
+from .ETKBaseObject import ETKBaseObject
 from .ETKBaseWidget import ETKBaseWidget
 
 
 class ETKEventData:
-    __ATTRIBUTES = {"sender": ETKBaseObject, "event": ETKEvents, "tk_event": Event, "child_sender": ETKBaseWidget, "rel_pos": Vector2d, "abs_pos": Vector2d, "state": str | int, "btn_num": int, "keysym": str, "keycode": int, "keychar": str}
+    __ATTRIBUTES = {"sender": ETKBaseObject, "event": ETKBaseObject.Events, "tk_event": Event, "child_sender": ETKBaseWidget, "rel_pos": Vector2d, "abs_pos": Vector2d, "state": str | int, "btn_num": int, "keysym": str, "keycode": int, "keychar": str}
 
-    def __init__(self, sender: ETKBaseObject, event: ETKEvents, *, tk_event: Optional[Event] = None, child_sender: Optional[ETKBaseWidget] = None, rel_pos: Optional[Vector2d] = None, abs_pos: Optional[Vector2d] = None, state: Optional[str | int] = None, btn_num: Optional[int] = None, keysym: Optional[str] = None, keycode: Optional[int] = None, keychar: Optional[str] = None) -> None:  # type:ignore
+    def __init__(self, sender: ETKBaseObject, event: ETKBaseObject.Events, *, tk_event: Optional[Event] = None, child_sender: Optional[ETKBaseWidget] = None, rel_pos: Optional[Vector2d] = None, abs_pos: Optional[Vector2d] = None, state: Optional[str | int] = None, btn_num: Optional[int] = None, keysym: Optional[str] = None, keycode: Optional[int] = None, keychar: Optional[str] = None) -> None:  # type:ignore
         self.sender = sender
         self.event = event
         self.tk_event = tk_event  # type:ignore

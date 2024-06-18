@@ -4,13 +4,12 @@ from typing import Any
 from .Internal.ETKMain import ETKMain
 from .Vector2d import Vector2d
 from .Internal.ETKBaseTkWidgetText import ETKBaseTkWidgetText
-from .Internal.ETKBaseObject import ETKEvents
-from .Internal.ETKBaseObject import ETKEvents
 
-class ETKLabelEvents(ETKEvents):
-    pass
 
 class ETKLabel(ETKBaseTkWidgetText):
+    class Events(ETKBaseTkWidgetText.Events):
+        pass
+
     def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: Vector2d = Vector2d(80, 17), text: str = "Label", *, multiline: bool = True, visibility: bool = True, background_color: int = 0xEEEEEE, text_color: int = 0, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
         self._tk_object: Text = Text(main.root_tk_object)  # type:ignore
         self._send_button_event_break = True
@@ -19,7 +18,7 @@ class ETKLabel(ETKBaseTkWidgetText):
         super().__init__(main=main, pos=pos, size=size, text=text, visibility=visibility, background_color=background_color, text_color=text_color, outline_color=outline_color, outline_thickness=outline_thickness, **kwargs)
 
         self._tk_object["state"] = "disabled"
-        self.add_event(ETKEvents.MOUSE_DOWN, lambda: None)
+        self.add_event(self.Events.MOUSE_DOWN, lambda: None)
         self._tk_object.configure(cursor="")
 
     # region Properties
@@ -30,14 +29,14 @@ class ETKLabel(ETKBaseTkWidgetText):
 
     # endregion
     # region Methods
-        
+
     def _update_text(self):
         state = self._tk_object["state"]
         self._tk_object["state"] = "normal"
         self._tk_object.delete(1.0, END)
         self._tk_object.insert(1.0, self._text)
         self._tk_object["state"] = state
-        
+
     def _handle_tk_event(self, event: Event) -> str | None:  # type:ignore
         super()._handle_tk_event(event)  # type:ignore
         match event.type:
@@ -47,4 +46,4 @@ class ETKLabel(ETKBaseTkWidgetText):
             case _:
                 pass
 
-    #endregion
+    # endregion

@@ -10,13 +10,12 @@ from .ETKCanvasOval import ETKCanvasOval
 from .ETKCanvasCircle import ETKCanvasCircle
 from .ETKCanvasLine import ETKCanvasLine
 from tkinter import Canvas
-from .Internal.ETKBaseObject import ETKEvents
-
-class ETKCanvasEvents(ETKEvents):
-    pass
 
 
 class ETKCanvas(ETKBaseTkWidgetDisableable):
+    class Events(ETKBaseTkWidgetDisableable.Events):
+        pass
+
     def __init__(self, main: ETKMain, pos: Vector2d, size: Vector2d, *, visibility: bool = True, enabled: bool = True, background_color: int = 0xFFFFFF, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
         self._tk_object: Canvas = Canvas(main.root_tk_object, highlightthickness=0)  # type:ignore
         self.__canvas_items: list[ETKCanvasItem] = []

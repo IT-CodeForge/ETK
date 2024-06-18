@@ -13,23 +13,22 @@ if TYPE_CHECKING:
     from .ETKEventData import ETKEventData
 
 
-class ETKEvents(SubclassableEnum):
-    MOUSE_DOWN: ETKEvents
-    MOUSE_UP: ETKEvents
-    ENTER: ETKEvents
-    LEAVE: ETKEvents
-    MOUSE_MOVED: ETKEvents
-    _values = {"MOUSE_DOWN": "<ButtonPress>", "MOUSE_UP": "<ButtonRelease>", "ENTER": "<Enter>", "LEAVE": "<Leave>", "MOUSE_MOVED": "<Motion>"}
-
-
 class ETKBaseObject:
+    class Events(SubclassableEnum):
+        MOUSE_DOWN: ETKBaseObject.Events
+        MOUSE_UP: ETKBaseObject.Events
+        ENTER: ETKBaseObject.Events
+        LEAVE: ETKBaseObject.Events
+        MOUSE_MOVED: ETKBaseObject.Events
+        _values = {"MOUSE_DOWN": "<ButtonPress>", "MOUSE_UP": "<ButtonRelease>", "ENTER": "<Enter>", "LEAVE": "<Leave>", "MOUSE_MOVED": "<Motion>"}
+
     def __init__(self, *, main: ETKMain, pos: Vector2d, size: Vector2d, visibility: bool, background_color: int) -> None:
         self._pos: Vector2d = Vector2d() if pos != Vector2d() else Vector2d(1)
         self._size: Vector2d = Vector2d() if size != Vector2d() else Vector2d(1)
         self.__background_color: int = 0 if background_color != 0 else 1
         self.__visibility: bool = not visibility
         self._main = main
-        self._event_lib: dict[ETKEvents, list[Callable[[], Any] | Callable[[ETKEventData], Any]]] = {e: [] for e in ETKEvents}
+        self._event_lib: dict[ETKBaseObject.Events, list[Callable[[], Any] | Callable[[ETKEventData], Any]]] = {e: [] for e in self.Events}
 
         self.background_color = background_color
         self.pos = pos
@@ -94,7 +93,7 @@ class ETKBaseObject:
         self._main.scheduler.schedule_action(self._update_background_color)
 
     @property
-    def events(self) -> dict[ETKEvents, list[Callable[..., Any]]]:
+    def events(self) -> dict[Events, list[Callable[..., Any]]]:
         """READ-ONLY"""
         return self._event_lib.copy()
 
@@ -119,10 +118,10 @@ class ETKBaseObject:
 
     # region Eventhandling Methods
 
-    def add_event(self, event_type: ETKEvents, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
+    def add_event(self, event_type: Events, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
         self._event_lib[event_type].append(eventhandler)
 
-    def remove_event(self, event_type: ETKEvents, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
+    def remove_event(self, event_type: Events, eventhandler: Callable[[], None] | Callable[[ETKEventData], None]) -> None:
         self._event_lib[event_type].remove(eventhandler)
 
     def _handle_event(self, event_data: ETKEventData, ignore_scheduler: bool = False) -> None:

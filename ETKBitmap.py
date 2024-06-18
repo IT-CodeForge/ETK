@@ -4,12 +4,12 @@ from .Internal.ETKUtils import gen_col_from_int
 from .Vector2d import Vector2d
 from tkinter import PhotoImage, Label
 from typing import Any, Iterable
-from .Internal.ETKBaseObject import ETKEvents
 
-class ETKBitmapEvents(ETKEvents):
-    pass
 
 class ETKBitmap(ETKBaseTkWidgetDisableable):
+    class Events(ETKBaseTkWidgetDisableable.Events):
+        pass
+
     def __init__(self, main: ETKMain, pos: Vector2d, size: Vector2d, *, visibility: bool = True, enabled: bool = True, background_color: int = 0xAAAAAA, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
         self.__bitmap = PhotoImage(width=int(size.x), height=int(size.y))
         self._tk_object: Label = Label(  # type:ignore
@@ -17,7 +17,7 @@ class ETKBitmap(ETKBaseTkWidgetDisableable):
         super().__init__(main=main, pos=pos, size=size, visibility=visibility, enabled=enabled, background_color=background_color, outline_color=outline_color, outline_thickness=outline_thickness, **kwargs)
 
     # region Methods
-    
+
     def _update_size(self) -> bool:
         if not super()._update_size():
             return False
