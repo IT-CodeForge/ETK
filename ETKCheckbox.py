@@ -20,6 +20,7 @@ class ETKCheckbox(ETKBaseTkWidgetButton):
     def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: Vector2d = Vector2d(70, 18), text: str = "Checkbox", state: bool = False, *, visibility: bool = True, enabled: bool = True, background_color: int = 0xEEEEEE, text_color: int = 0x0, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
         self.__state_var = IntVar()
         self.__state = not state
+        self.__override_output = False
         self.__ignore_next_change_event: bool = False
         self._create_outline(main.root_tk_object)
         self._tk_object: Checkbutton = Checkbutton(  # type:ignore
@@ -33,12 +34,15 @@ class ETKCheckbox(ETKBaseTkWidgetButton):
 
     @property
     def state(self) -> bool:
+        if self.__override_output:
+            return self.__state
         return bool(self.__state_var.get())
 
     @state.setter
     def state(self, value: bool) -> None:
         if self.state == value:
             return
+        self.__override_output = True
         self.__state = value
         self._main.scheduler.schedule_action(self.__update_state)
 
@@ -48,6 +52,7 @@ class ETKCheckbox(ETKBaseTkWidgetButton):
     def __update_state(self):
         self.__ignore_next_change_event = True
         self.__state_var.set(self.__state)
+        self.__override_output = False
 
     def __checkbox_event_handler(self, *args: str) -> None:
         if self.__ignore_next_change_event:

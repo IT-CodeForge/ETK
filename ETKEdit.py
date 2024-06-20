@@ -19,6 +19,7 @@ class ETKEdit(ETKBaseTkWidgetDisableable, ETKLabel):
 
     def __init__(self, main: ETKMain, pos: Vector2d = Vector2d(0, 0), size: Vector2d = Vector2d(80, 17), text: str = "Edit", *, multiline: bool = False, visibility: bool = True, enabled: bool = True, background_color: int = 0xEEEEEE, text_color: int = 0, outline_color: int = 0x0, outline_thickness: int = 0, **kwargs: Any) -> None:
         self.__old_text: str = ""
+        self.__override_text_output = False
         self.__delay_cycles: int = -1
 
         super().__init__(main=main, pos=pos, size=size, text=text, multiline=multiline, visibility=visibility, enabled=enabled,
@@ -28,10 +29,25 @@ class ETKEdit(ETKBaseTkWidgetDisableable, ETKLabel):
         self._event_lib.update({e: [] for e in self.EVENTS if e not in self._event_lib.keys()})
         self.add_event(self.EVENTS.CHANGED, lambda: None)
 
+    # region Properties
+
+    @ETKLabel.text.getter
+    def text(self) -> str:
+        if self.__override_text_output:
+            return ETKLabel.text.fget(self)  # type:ignore
+        return self._tk_object.get("1.0", 'end-1c')
+
+    @ETKLabel.text.setter
+    def text(self, value: str):
+        self.__override_text_output = True
+        ETKLabel.text.fset(self, value)  # type:ignore
+
+    # endregion
     # region Methods
 
     def _update_text(self):
         super()._update_text()
+        self.__override_text_output = False
         self.__old_text = self._text
 
     def _update_enabled(self) -> bool:

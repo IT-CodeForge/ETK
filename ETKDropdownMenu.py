@@ -23,6 +23,7 @@ class ETKDropdownMenu(ETKBaseTkWidgetDisableable):
             options = [""]
         self.__options = options
         self._tk_object = OptionMenu(main.root_tk_object, self.__selected_var, *options)
+        self.__override_output = False
         self.__ignore_next_change_event = False
 
         super().__init__(main=main, pos=pos, size=size, visibility=visibility, enabled=enabled, background_color=background_color, outline_color=outline_color, outline_thickness=outline_thickness, **kwargs)
@@ -45,18 +46,22 @@ class ETKDropdownMenu(ETKBaseTkWidgetDisableable):
 
     @property
     def selected(self) -> str:
+        if self.__override_output:
+            return self.__selected
         return self.__selected_var.get()
 
     @selected.setter
     def selected(self, value: str) -> None:
         if self.selected == value:
             return
+        self.__override_output = True
         self.__selected = value
         self._main.scheduler.schedule_action(self.__update_selected)
 
     def __update_selected(self):
         self.__ignore_next_change_event = True
         self.__selected_var.set(self.__selected)
+        self.__override_output = False
 
     def __update_options(self):
         self._tk_object['menu'].delete(0, 'end')

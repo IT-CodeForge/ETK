@@ -25,7 +25,7 @@ class ETKLabel(ETKBaseTkWidgetText):
 
     @ETKBaseTkWidgetText.text.getter
     def text(self) -> str:
-        return self._tk_object.get("1.0", 'end-1c')
+        return self._text
 
     # endregion
     # region Methods
