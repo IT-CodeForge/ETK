@@ -31,14 +31,16 @@ class ETKEdit(ETKBaseTkWidgetDisableable, ETKLabel):
 
     # region Properties
 
-    @ETKLabel.text.getter
+    @property
     def text(self) -> str:
         if self.__override_text_output:
             return ETKLabel.text.fget(self)  # type:ignore
         return self._tk_object.get("1.0", 'end-1c')
 
-    @ETKLabel.text.setter
+    @text.setter
     def text(self, value: str):
+        if self._text == value:
+            return
         self.__override_text_output = True
         ETKLabel.text.fset(self, value)  # type:ignore
 
