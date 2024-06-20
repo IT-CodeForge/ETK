@@ -1,5 +1,6 @@
 from __future__ import annotations
 from abc import abstractmethod
+import os
 from tkinter import Event, Tk, EventType, font
 from typing import Any, Callable, Optional
 
@@ -161,7 +162,7 @@ class ETKMainWindow(ETKBaseTkObject):
     def exit(self) -> None:
         self._handle_event(ETKEventData(self, self.EVENTS.EXIT), ignore_scheduler=True)
         if not self.exit_locked and not self.exit_ignore_next:
-            self._main.scheduler.exit()
+            os._exit(0)  # type:ignore
         if self.exit_ignore_next:
             self.exit_ignore_next = False
 
