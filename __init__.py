@@ -2,10 +2,13 @@ from .Internal.ETKEventData import ETKEventData
 from .Internal.ETKBaseObject import ETKBaseObject
 from .Internal.ETKBaseWidget import ETKBaseWidget
 from .Internal.ETKBaseTkObject import ETKBaseTkObject
-from .Internal.ETKBaseTkWidget import ETKBaseTkWidget, ETKBaseWidget
+from .Internal.ETKBaseTkWidget import ETKBaseTkWidget
 from .Internal.ETKBaseWidgetDisableable import ETKBaseWidgetDisableable
+from .Internal.ETKBaseTkWidgetButton import ETKBaseTkWidgetButton
 from .Internal.ETKBaseTkWidgetDisableable import ETKBaseTkWidgetDisableable
 from .Internal.ETKBaseTkWidgetText import ETKBaseTkWidgetText
+from .Internal.ETKMain import ETKMain
+from .Internal.ETKScheduler import ETKScheduler
 from .ETKBitmap import ETKBitmap
 from .ETKButton import ETKButton
 from .ETKCanvas import ETKCanvas
@@ -55,3 +58,6 @@ if __name__ == "__main__":
     ETKBaseTkWidgetDisableable.abs_enabled
     ETKBaseTkWidgetText.abs_enabled
     ETKEventData.__annotations__
+    ETKBaseTkWidgetButton.abs_enabled
+    ETKMain.mro
+    ETKScheduler.mro
