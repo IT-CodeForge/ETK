@@ -1,8 +1,8 @@
 import sys
 from threading import Thread, current_thread
-import threading
 import time
 from tkinter import Tk
+from traceback import format_exc
 from typing import Any, Callable, Optional, Type
 
 from .ETKEventData import ETKEventData
@@ -14,7 +14,6 @@ from .ETKUtils import exec_event_callback
 
 class ETKScheduler:
     def __init__(self, tk: Tk, disabled: bool) -> None:
-        self.__exit = False
         self.__disabled = disabled
         self.except_exceptions: tuple[Type[Exception], ...] = tuple()
         self.except_exception_handler: Callable[[Exception], Optional[bool]] = lambda _: True
@@ -22,7 +21,7 @@ class ETKScheduler:
         self.__scheduled_events: list[tuple[Callable[..., Any], ETKEventData]] = []
         self.__scheduled_gui_actions: dict[Callable[..., Any], tuple[tuple[Any, ...], dict[str, Any]]] = {}
         self.__scheduled_non_gui_actions: dict[Callable[..., Any], tuple[tuple[Any, ...], dict[str, Any]]] = {}
-        self.__thread = Thread(target=self.__handler)
+        self.__thread = Thread(target=self.__handler, daemon=True)
         if not self.__disabled:
             self.__thread.start()
 
@@ -48,13 +47,8 @@ class ETKScheduler:
             return
         self.__scheduled_events.append((ev_callback, event_data))
 
-    def exit(self) -> None:
-        self.__exit = True
-        if not self.__thread.is_alive():
-            sys.exit()
-
     def __handle_actions(self, scheduler_dict: dict[Callable[..., Any], tuple[tuple[Any, ...], dict["str", Any]]], ev_loop_callback: Callable[..., Any] = lambda: None):
-        while len(scheduler_dict.keys()) != 0 and not self.__exit:
+        while len(scheduler_dict.keys()) != 0:
             ev_loop_callback()
             c2 = tuple(scheduler_dict.keys())[0]
             a2, kwa2 = scheduler_dict[c2]
@@ -68,13 +62,13 @@ class ETKScheduler:
 
     def __handler(self):
         try:
-            while not self.__exit and threading.main_thread().is_alive():
+            while True:
                 begin_ns = time.time_ns()
 
                 if len(self.__scheduled_gui_actions.keys()) != 0 or len(self.__scheduled_non_gui_actions.keys()) != 0:
                     raise RuntimeError
 
-                while len(self.__scheduled_events) > 0 and not self.__exit:
+                while len(self.__scheduled_events) > 0:
                     c1, data = self.__scheduled_events[0]
                     self.__scheduled_events.pop(0)
                     exec_event_callback(c1, data)
@@ -85,14 +79,16 @@ class ETKScheduler:
                 duration = sleep_duration if duration > sleep_duration else duration
                 time.sleep(sleep_duration - duration)
 
-            if threading.main_thread().is_alive():
-                self.__tk.after(0, sys.exit)
-                sys.exit()
-
         except self.except_exceptions as e:
             if self.except_exception_handler(e):
-                self.__tk.after(0, sys.exit)
+                try:
+                    self.__tk.after(0, lambda: sys.exit(1))
+                except:
+                    sys.exit(1)
 
         except Exception as e:
-            self.__tk.after(0, sys.exit)
-            raise e
+            print(format_exc(), file=sys.stderr)
+            try:
+                self.__tk.after(0, lambda: sys.exit(1))
+            except:
+                sys.exit(1)
