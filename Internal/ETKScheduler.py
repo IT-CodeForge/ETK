@@ -16,7 +16,6 @@ class ETKScheduler:
     def __init__(self, tk: Tk, disabled: bool) -> None:
         self.__exit = False
         self.__disabled = disabled
-        self._blocked = False
         self.except_exceptions: tuple[Type[Exception], ...] = tuple()
         self.except_exception_handler: Callable[[Exception], Optional[bool]] = lambda _: True
         self.__tk = tk
@@ -28,7 +27,7 @@ class ETKScheduler:
             self.__thread.start()
 
     def __schedule_action(self, scheduler_dict: dict[Callable[..., Any], tuple[tuple[Any, ...], dict["str", Any]]], callback: Callable[..., Any], *args: Any, **kwargs: Any):
-        if (current_thread() != self.__thread and not self._blocked) or self.__disabled:
+        if current_thread() != self.__thread or self.__disabled:
             callback(*args, **kwargs)
             return
 
@@ -89,7 +88,7 @@ class ETKScheduler:
             if threading.main_thread().is_alive():
                 self.__tk.after(0, sys.exit)
                 sys.exit()
-        
+
         except self.except_exceptions as e:
             if self.except_exception_handler(e):
                 self.__tk.after(0, sys.exit)
