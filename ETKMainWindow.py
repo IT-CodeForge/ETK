@@ -21,9 +21,10 @@ class ETKMainWindow(ETKBaseTkObject):
         FOCUS_IN: ETKMainWindow.EVENTS
         FOCUS_OUT: ETKMainWindow.EVENTS
         START: ETKMainWindow.EVENTS
+        PRE_EXIT: ETKMainWindow.EVENTS
         EXIT: ETKMainWindow.EVENTS
 
-        _values = {"KEY_PRESSED": "<KeyPress>", "KEY_RELEASED": "<KeyRelease>", "FOCUS_IN": "<FocusIn>", "FOCUS_OUT": "<FocusOut>", "START": "<Custom>", "EXIT": "<Custom>"}
+        _values = {"KEY_PRESSED": "<KeyPress>", "KEY_RELEASED": "<KeyRelease>", "FOCUS_IN": "<FocusIn>", "FOCUS_OUT": "<FocusOut>", "START": "<Custom>", "PRE_EXIT": "<Custom>", "EXIT": "<Custom>"}
 
     def __init__(self, pos: Vector2d = Vector2d(0, 0), size: Optional[Vector2d] = None, caption: str = "Window-Title", fullscreen: bool = True, *, visibility: bool = True, background_color: int = 0xAAAAAA, scheduler_disabled: bool = False, scale_factor: float = 1, **kwargs: Any) -> None:
         from .ETKCanvas import ETKCanvas
@@ -40,6 +41,7 @@ class ETKMainWindow(ETKBaseTkObject):
         self.__fullscreen = False
         self.canvas = ETKCanvas(self._main, Vector2d(), Vector2d())
         self.__caption = ""
+        self.__exit_ongoing = False
 
         super().__init__(main=self._main, pos=pos, size=Vector2d(1920, 1080), background_color=background_color, visibility=visibility, **kwargs)
 
@@ -165,11 +167,16 @@ class ETKMainWindow(ETKBaseTkObject):
         self._tk_object.mainloop()
 
     def exit(self) -> None:
-        self._handle_event(ETKEventData(self, self.EVENTS.EXIT), ignore_scheduler=True)
+        if self.__exit_ongoing:
+            return
+        self.__exit_ongoing = True
+        self._handle_event(ETKEventData(self, self.EVENTS.PRE_EXIT), ignore_scheduler=True)
         if not self.exit_locked and not self.exit_ignore_next:
+            self._handle_event(ETKEventData(self, self.EVENTS.EXIT), ignore_scheduler=True)
             sys.exit()
         if self.exit_ignore_next:
             self.exit_ignore_next = False
+        self.__exit_ongoing = False
 
     def update_gui(self) -> None:
         self._main.scheduler.handle_actions()
