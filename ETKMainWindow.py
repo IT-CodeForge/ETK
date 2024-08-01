@@ -61,6 +61,11 @@ class ETKMainWindow(ETKBaseTkObject):
             INTERNAL_EVENT: INTERNAL_EVENTS
             _values = {"INTERNAL_EVENT": "<Custom>"}
 
+        # apply app icon (if exists)
+        if getattr(sys, "frozen", False):
+            self._tk_object.iconbitmap(  # type:ignore
+                sys.executable)
+
         self._main.scheduler.schedule_event(lambda: self._add_elements(), ETKEventData(self, INTERNAL_EVENTS.INTERNAL_EVENT))
         self._main.scheduler.schedule_event(lambda: self._handle_event(ETKEventData(self, self.EVENTS.START)), ETKEventData(self, INTERNAL_EVENTS.INTERNAL_EVENT))
 
