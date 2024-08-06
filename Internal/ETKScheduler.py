@@ -83,12 +83,12 @@ class ETKScheduler:
             if self.except_exception_handler(e):
                 try:
                     self.__tk.after(0, lambda: sys.exit(1))
-                except:
+                finally:
                     sys.exit(1)
 
         except Exception as e:
             print(format_exc(), file=sys.stderr)
             try:
                 self.__tk.after(0, lambda: sys.exit(1))
-            except:
+            finally:
                 sys.exit(1)
