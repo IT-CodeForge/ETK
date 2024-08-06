@@ -6,12 +6,13 @@ from .Internal.ETKMain import ETKMain
 
 
 class ETKTimer:
-    def __init__(self, main: ETKMain, interval_in_ms: int, timer_function: Callable[[], None], running: bool = True, **kwargs: Any) -> None:
+    def __init__(self, main: ETKMain, interval_in_ms: int, timer_function: Callable[[], None], running: bool = True, thread_daemonic: bool = True, **kwargs: Any) -> None:
         self.__my_Tk: Tk = main.root_tk_object
         self.__scheduler = main.scheduler
         self.__timer_function: Callable[[], None] = timer_function
         self.interval_in_ms: int = interval_in_ms
         self.__is_running = running
+        self.__thread_daemonic = thread_daemonic
         if running:
             self.__my_Tk.after(self.interval_in_ms, self.__trigger)
 
@@ -32,7 +33,7 @@ class ETKTimer:
 
     def __trigger(self) -> None:
         if self.__is_running:
-            t = Thread(target=self.__scheduler.schedule_event, args=(self.__timer_function, tuple()))
+            t = Thread(target=self.__scheduler.schedule_event, args=(self.__timer_function, tuple()), daemon=self.__thread_daemonic)
             t.start()
             self.__my_Tk.after(self.interval_in_ms, self.__trigger)
 
