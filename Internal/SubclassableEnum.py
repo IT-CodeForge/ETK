@@ -3,11 +3,11 @@ from typing import Any, Type
 from warnings import warn
 
 
-class SubclassableEnumType(type):
+class _SubclassableEnumType(type):
     _members: dict[str, Any]
     _in_construction: bool
 
-    def __new__(metacls, name: str, bases: tuple[Type[Any]], classdict: dict[str, Any], **kwds: Any) -> SubclassableEnumType:
+    def __new__(metacls, name: str, bases: tuple[Type[Any]], classdict: dict[str, Any], **kwds: Any) -> _SubclassableEnumType:
         t_member_keys = classdict.get("_values", {})
         cls = type.__new__(metacls, name, bases, classdict)
         cls._in_construction = True
@@ -17,7 +17,7 @@ class SubclassableEnumType(type):
             setattr(cls, k, v)
             if k not in classdict.get("__annotations__", {}).keys():
                 warn(f"missing annotation for {v} in {type(v)}")
-        
+
         for a in classdict.get("__annotations__", {}).keys():
             if a not in _members.keys() and a not in ["_values"]:
                 warn(f"missing value for {name}.{a}")
@@ -51,11 +51,11 @@ class SubclassableEnumType(type):
         return f"{type(cls).__name__}({', '.join(str(m) for m in cls._members.values())})"
 
 
-class SubclassableEnum(metaclass=SubclassableEnumType):
+class SubclassableEnum(metaclass=_SubclassableEnumType):
     _values: dict[str, Any] = {}
 
     def __init__(self, name: str = "", value: Any = None) -> None:
-        if not self._in_construction:
+        if not self._in_construction:  # type:ignore
             raise RuntimeError(f"class {type(self).__name__} is static")
         self._name = name
         self._value = value
