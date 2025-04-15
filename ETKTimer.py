@@ -33,7 +33,8 @@ class ETKTimer:
 
     def __trigger(self) -> None:
         if self.__is_running:
-            t = Thread(target=self.__scheduler.schedule_event, args=(self.__timer_function, tuple()), daemon=self.__thread_daemonic)
+            t = Thread(target=self.__scheduler.schedule_event, daemon=self.__thread_daemonic,
+                       args=(self.__timer_function, tuple()))  # type:ignore  # schedule_event isn't constructed for use without EventData, but ETKTimer hasn't one.
             t.start()
             self.__my_Tk.after(self.interval_in_ms, self.__trigger)
 
